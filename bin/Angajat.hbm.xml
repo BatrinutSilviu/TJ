@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="exemplu.Angajat" table="angajati">
+		<id name="id" type="int" column="id"/>
+		<set name="cursuri" cascade="all">
+			<key column="id_angajat" />
+			<one-to-many class="exemplu.Curs" />
+		</set>
+		<property name="nume" type="java.lang.String">
+			<column name="nume" />
+		</property>
+		<property name="firma" type="java.lang.String">
+			<column name="firma" />
+		</property>
+		<property name="functia" type="java.lang.String">
+			<column name="functia" />
+		</property>
+		<property name="data_angajarii" type="java.util.Date">
+			<column name="data_angajarii" />
+		</property>
+	</class>
+	
+	<class name="exemplu.Curs" table="cursuri">
+		<id name="id" type="int" column="id">
+			<generator class="identity"/>
+		</id>
+		<property name="denumire" type="java.lang.String">
+			<column name="denumire" />
+		</property>
+		<property name="numar_ore" type="int">
+			<column name="numar_ore" />
+		</property>
+		<property name="valoare" type="java.lang.String">
+			<column name="valoare" />
+		</property>
+		<property name="diploma" type="boolean">
+			<column name="diploma" />
+		</property>
+		<property name="anul" type="int">
+			<column name="anul" />
+		</property>
+	</class>
+</hibernate-mapping>
