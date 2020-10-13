@@ -10,7 +10,8 @@ public class Curs {
 	private int anul;
 	public Curs(){}
 	public Curs(int id, String denumire, int numar_ore, String valoare, boolean diploma,
-			int anul) {
+			int anul) 
+	{
 		super();
 		this.id = id;
 		this.denumire = denumire;
@@ -20,7 +21,8 @@ public class Curs {
 		this.anul = anul;
 	}
 	public Curs(String denumire, int numar_ore, String valoare, boolean diploma,
-			int anul) {
+			int anul) 
+	{
 		super();
 		this.denumire = denumire;
 		this.numar_ore = numar_ore;
@@ -36,38 +38,49 @@ public class Curs {
 	{
 		this.id = id;
 	}
-	public String getDenumire() {
+	public String getDenumire() 
+	{
 		return denumire;
 	}
-	public void setDenumire(String denumire) {
+	public void setDenumire(String denumire) 
+	{
 		this.denumire = denumire;
 	}
-	public int getNumar_ore() {
+	public int getNumar_ore() 
+	{
 		return numar_ore;
 	}
-	public void setNumar_ore(int numar_ore) {
+	public void setNumar_ore(int numar_ore) 
+	{
 		this.numar_ore = numar_ore;
 	}
-	public String getValoare() {
+	public String getValoare() 
+	{
 		return valoare;
 	}
-	public void setValoare(String valoare) {
+	public void setValoare(String valoare) 
+	{
 		this.valoare = valoare;
 	}
-	public boolean isDiploma() {
+	public boolean isDiploma() 
+	{
 		return diploma;
 	}
-	public void setDiploma(boolean diploma) {
+	public void setDiploma(boolean diploma) 
+	{
 		this.diploma = diploma;
 	}
-	public int getAnul() {
+	public int getAnul() 
+	{
 		return anul;
 	}
-	public void setAnul(int anul) {
+	public void setAnul(int anul) 
+	{
 		this.anul = anul;
 	}
 	@Override
-	public String toString() {
+	public String toString() 
+	{
 		return "Curs [id=" + id + ", denumire=" + denumire + ", numar_ore=" + numar_ore
 				+ ", valoare=" + valoare + ", diploma=" + diploma + ", anul=" + anul + "]";
 	}

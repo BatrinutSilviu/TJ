@@ -44,10 +44,12 @@ public class Angajat {
 		this.data_angajarii=data_angajarii;
 		this.cursuri=cursuri;
 	}
-	public int getId() {
+	public int getId() 
+	{
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(int id) 
+	{
 		this.id = id;
 	}
 	public String getNume() 
@@ -66,10 +68,12 @@ public class Angajat {
 	{
 		this.firma = firma;
 	}
-	public String getFunctia() {
+	public String getFunctia() 
+	{
 		return functia;
 	}
-	public void setFunctia(String functia) {
+	public void setFunctia(String functia) 
+	{
 		this.functia = functia;
 	}
 	public Date getdata_angajarii() 
@@ -80,15 +84,21 @@ public class Angajat {
 	{
 		this.data_angajarii = data_angajarii;
 	}
-	@Override
-	public String toString() 
-	{
-		return id + ", " + nume + ", " + functia+ ", "+firma+", "+data_angajarii.getYear()+"-"+data_angajarii.getMonth()+"-"+data_angajarii.getDay() ;
-	}
 	public Set getCursuri() {
 		return cursuri;
 	}
 	public void setCursuri( Set cursuri ) {
 		this.cursuri = cursuri;
+	}
+	@Override
+	public String toString() {
+		String ret="Angajat [id=" + id + ", nume=" + nume + ", firma=" + firma + ", functia=" + functia
+				+ ", data_angajarii=" + data_angajarii + ", cursuri=";
+		for(Object c : cursuri )
+		{		
+			ret+="\n";
+			ret+=c.toString();
+		}
+		return ret;
 	}
 }

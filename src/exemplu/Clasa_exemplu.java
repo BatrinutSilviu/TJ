@@ -1,5 +1,10 @@
 package exemplu;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -19,12 +24,10 @@ public class Clasa_exemplu
 {
 	private static SessionFactory factory;
 	
-	public static void main(String[] args) 
+	public static void main(String[] args) throws IOException 
 	{
-		Calendar calendar= Calendar.getInstance();
 		try
 		{
-//			factory = new Configuration().configure().buildSessionFactory();	
 			Configuration configuration = new Configuration();
 			configuration.configure();
 			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(
@@ -36,215 +39,250 @@ public class Clasa_exemplu
 			System.err.println("Failed to create sessionFactory object." + ex);
 			throw new ExceptionInInitializerError(ex);
 		}
+		Calendar calendar= Calendar.getInstance();
+		String opt;
+		int id_global;
+		String cale = "D:/eclipse-workspace-Java/Exemplu/src/id_angajat.txt";
+		FileReader fileReader = new FileReader(cale);
+		id_global = fileReader.read();
+		do
+		{
+			System.out.println();
+			System.out.println("Alegeti optiunea:");
+			System.out.println("0.Iesire");
+			System.out.println("1.Afisare angajati");
+			System.out.println("2.Adaugare angajat");
+			System.out.println("3.Stergere angajat");
+			System.out.println("4.Actualizare angajat");
+			System.out.println("5.Cautare angajat dupa nume");
+			System.out.println("6.Stergere curs");
+			System.out.println("7.Actualizare curs");
+			System.out.println("8.Cautare curs dupa denumire");
+			System.out.println("9.Afisare angajati dupa firma");
+			System.out.println("10.Afisare angajati dupa vechime");
+			System.out.println("11.Afisare angajati dupa curs");
+			InputStreamReader reader=new InputStreamReader(System.in);  
+			BufferedReader br=new BufferedReader(reader);
+			opt=br.readLine();
+			switch(opt)
+			{
+				case "0":
+				{
+					System.out.println("La revedere");
+					System.exit(0);
+				}
+				case "1":
+				{
+					afisare();
+					break;
+				}
+				case "2":
+				{
+					FileWriter fileWriter = new FileWriter(cale);
+					System.out.println("Dati numele");
+					String nume = br.readLine();
+					System.out.println("Dati firma");
+					String firma = br.readLine();
+					System.out.println("Dati functia");
+					String functia = br.readLine();
+					System.out.println("Dati anul angajarii");
+					String an = br.readLine();
+					System.out.println("Dati luna angajarii");
+					String luna = br.readLine();
+					System.out.println("Dati ziua angajarii");
+					String zi = br.readLine();
+					calendar.set(Integer.parseInt(an), Integer.parseInt(luna)-1, Integer.parseInt(zi));
+					System.out.println("Dati numarul de cursuri");
+					String nr_curs = br.readLine();
+					Set<Curs> set = new HashSet<Curs>();
+					for( short index=0; index < Integer.parseInt(nr_curs); index++ )
+					{				
+						System.out.println("Dati denumirea cursului");
+						String denumire = br.readLine();
+						System.out.println("Dati numarul de ore");
+						String ore = br.readLine();
+						System.out.println("Dati valoarea");
+						String valoare = br.readLine();
+						System.out.println("Se emite diploma?Pentru da tastati 1, iar pentru nu tastati 0");
+						String diploma = br.readLine();		
+						System.out.println("Dati anul");
+						String anul = br.readLine();
+						set.add(new Curs(denumire,Integer.parseInt(ore),valoare,Boolean.parseBoolean(diploma),Integer.parseInt(anul)));
+					}				
+					adaugare(new Angajat(++id_global,nume,firma,functia,calendar.getTime(),set));
+					fileWriter.write( (char)id_global );
+					fileWriter.close();
+					break;
+				}
+				case "3":
+				{
+					System.out.println("Dati id-ul angajatului");
+					String id = br.readLine();
+					stergere_angajat(Integer.parseInt(id));
+					break;
+				}
+				case "4":
+				{
+					System.out.println("Dati id-ul angajatului");
+					String id = br.readLine();
+					System.out.println("Dati functia");
+					String functie = br.readLine();
+					actualizare_angajat(Integer.parseInt(id),functie);
+					break;
+				}
+				case "5":
+				{
+					System.out.println("Dati numele");
+					String nume = br.readLine();
+					cautare_angajat_dupa_nume(nume);
+					break;
+				}
+				case "6":
+				{
+					System.out.println("Dati id-ul cursului");
+					String id = br.readLine();
+					stergere_curs(Integer.parseInt(id));
+					break;
+				}
+				case "7":
+				{
+					System.out.println("Dati id-ul cursului");
+					String id = br.readLine();
+					System.out.println("Dati numarul nou de ore");
+					String ore = br.readLine();
+					actualizare_curs(Integer.parseInt(id),Integer.parseInt(ore));
+					break;
+				}
+				case "8":
+				{
+					System.out.println("Dati cursul");
+					String denumire = br.readLine();
+					cautare_curs_dupa_denumire(denumire);
+					break;
+				}
+				case "9":
+				{
+					System.out.println("Dati firma");
+					String firma = br.readLine();
+					afisare_dupa_firma(firma);
+					break;
+				}
+				case "10":
+				{
+					System.out.println("Dati vechimea");
+					String vechime = br.readLine();
+					afisare_vechime( Integer.parseInt(vechime) );
+					break;
+				}
+				case "11":
+				{
+					System.out.println("Dati cursul");
+					String curs = br.readLine();
+					afisare_dupa_curs(curs);
+					break;
+				}
+				default:
+				{
+					System.out.println("optiune gresita");
+				}
+			}
+		}
+		while( !opt.equals("0") );
+	}
 
-		Set<Curs> set1 = new HashSet<Curs>();
-		set1.add(new Curs("agricultura",20,"nesemnificativ",true,1992));
-		set1.add(new Curs("it",30,"nesemnificativ",false,2020));
-		set1.add(new Curs("inginerie",30,"nesemnificativ",true,2005));
-		calendar.getTime();
-		adaugare(new Angajat(1,"Ionel","rockfm","dj",calendar.getTime(),set1));
-		
-		Set<Curs> set2 = new HashSet<Curs>();
-		set2.add(new Curs("frizer",25,"nesemnificativ",false,2006));
-		set2.add(new Curs("bucatar",35,"nesemnificativ",true,2019));
-		
-		adaugare(new Angajat(2,"Fanel","aquatim","scanfandru",calendar.getTime(),set2));
-		afisare();
+	private static void actualizare_angajat(Integer id, String functie )
+	{
+		Session session = factory.openSession();
+		Transaction tx = null;
+		try
+		{
+			tx = session.beginTransaction();
+			Angajat angajat= (Angajat)session.get(Angajat.class, id);
+			angajat.setFunctia( functie );
+			session.update(angajat);
+			tx.commit();
+		}
+		catch (HibernateException e) 
+		{
+			if (tx!=null)
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally 
+		{
+			session.close();
+		}
+	}
+
+	private static void actualizare_curs(Integer id, int numar_ore)
+	{
+		Session session = factory.openSession();
+		Transaction tx = null;
+		try
+		{
+			tx = session.beginTransaction();
+			Curs curs= (Curs)session.get(Curs.class, id);
+			curs.setNumar_ore(numar_ore);
+			session.update(curs);
+			tx.commit();
+		}
+		catch (HibernateException e) 
+		{
+			if (tx!=null)
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally 
+		{
+			session.close();
+		}
 	}
 	
-//	private static void inserare_angajat(String nume, String firma, String functie, Date data)
-//	{
-//		Session session = factory.openSession();
-//		Transaction tx = null;
-//		try
-//		{
-//			tx = session.beginTransaction();
-//			Angajat angajat= new Angajat(nume, firma, functie, data);
-//			session.save(angajat);
-//			tx.commit();
-//		}
-//		catch (HibernateException e) 
-//		{
-//			if (tx!=null) 
-//				tx.rollback();
-//			e.printStackTrace();
-//		}
-//		finally 
-//		{ 
-//			session.close(); 
-//		}
-//	}
+	private static void stergere_angajat(Integer id)
+	{
+		Session session = factory.openSession();
+		Transaction tx = null;
+		try
+		{
+			tx = session.beginTransaction();
+			Angajat angajat= (Angajat)session.get(Angajat.class, id);
+			session.delete(angajat);
+			tx.commit();
+		}
+		catch (HibernateException e) 
+		{
+			if (tx!=null) 
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally 
+		{
+			session.close();
+		}
+	}
 	
-//	private static void inserare_curs(int id, String nume, String firma, String functie, Calendar data)
-//	{
-//		Session session = factory.openSession();
-//		Transaction tx = null;
-//		try
-//		{
-//			tx = session.beginTransaction();
-//			Angajat angajat= new Angajat(id, nume, firma, functie, data);
-//			session.save(angajat);
-//			tx.commit();
-//		}
-//		catch (HibernateException e) 
-//		{
-//			if (tx!=null) 
-//				tx.rollback();
-//			e.printStackTrace();
-//		}
-//		finally 
-//		{ 
-//			session.close(); 
-//		}
-//	}
-//	
-//	private static void afisare_angajati( )
-//	{
-//		Session session = factory.openSession();
-//		Transaction tx = null;
-//		try
-//		{
-//			tx = session.beginTransaction();
-//			Query query= session.createQuery("from Angajat");
-//			List<Angajat> angajati = query.list();
-//			for (Angajat p: angajati)
-//			{
-//				System.out.println(p);
-//			}
-//			tx.commit();
-//		}
-//		catch (HibernateException e)
-//		{
-//			if (tx!=null) 
-//				tx.rollback();
-//			e.printStackTrace();
-//		}
-//		finally 
-//		{
-//			session.close();
-//		}
-//	}
-//	
-//	private static void afisare_cursuri( )
-//	{
-//		Session session = factory.openSession();
-//		Transaction tx = null;
-//		try
-//		{
-//			tx = session.beginTransaction();
-//			Query query= session.createQuery("from cursuri");
-//			List<Angajat> angajati = query.list();
-//			for (Angajat p: angajati)
-//			{
-//				System.out.println(p);
-//			}
-//			tx.commit();
-//		}
-//		catch (HibernateException e)
-//		{
-//			if (tx!=null) 
-//				tx.rollback();
-//			e.printStackTrace();
-//		}
-//		finally 
-//		{
-//			session.close();
-//		}
-//	}
-//	
-//	private static void actualizare_angajat(Integer id, String functie )
-//	{
-//		Session session = factory.openSession();
-//		Transaction tx = null;
-//		try
-//		{
-//			tx = session.beginTransaction();
-//			Angajat angajat= (Angajat)session.get(Angajat.class, id);
-//			angajat.setFunctia( functie );
-//			session.update(angajat);
-//			tx.commit();
-//		}
-//		catch (HibernateException e) 
-//		{
-//			if (tx!=null)
-//				tx.rollback();
-//			e.printStackTrace();
-//		}
-//		finally 
-//		{
-//			session.close();
-//		}
-//	}
-//	
-//	private static void actualizare_curs(Integer id, String functie )
-//	{
-//		Session session = factory.openSession();
-//		Transaction tx = null;
-//		try
-//		{
-//			tx = session.beginTransaction();
-//			Angajat angajat= (Angajat)session.get(Angajat.class, id);
-//			angajat.setFunctia( functie );
-//			session.update(angajat);
-//			tx.commit();
-//		}
-//		catch (HibernateException e) 
-//		{
-//			if (tx!=null)
-//				tx.rollback();
-//			e.printStackTrace();
-//		}
-//		finally 
-//		{
-//			session.close();
-//		}
-//	}
-//	
-//	private static void stergere_angajat(Integer id)
-//	{
-//		Session session = factory.openSession();
-//		Transaction tx = null;
-//		try
-//		{
-//			tx = session.beginTransaction();
-//			Angajat angajat= (Angajat)session.get(Angajat.class, id);
-//			session.delete(angajat);
-//			tx.commit();
-//		}
-//		catch (HibernateException e) 
-//		{
-//			if (tx!=null) 
-//				tx.rollback();
-//			e.printStackTrace();
-//		}
-//		finally 
-//		{
-//			session.close();
-//		}
-//	}
-//	
-//	private static void stergere_curs(Integer id)
-//	{
-//		Session session = factory.openSession();
-//		Transaction tx = null;
-//		try
-//		{
-//			tx = session.beginTransaction();
-//			Angajat angajat= (Angajat)session.get(Angajat.class, id);
-//			session.delete(angajat);
-//			tx.commit();
-//		}
-//		catch (HibernateException e) 
-//		{
-//			if (tx!=null) 
-//				tx.rollback();
-//			e.printStackTrace();
-//		}
-//		finally 
-//		{
-//			session.close();
-//		}
-//	}
+	private static void stergere_curs(Integer id)
+	{
+		Session session = factory.openSession();
+		Transaction tx = null;
+		try
+		{
+			tx = session.beginTransaction();
+			Curs curs= (Curs)session.get(Curs.class, id);
+			session.delete(curs);
+			tx.commit();
+		}
+		catch (HibernateException e) 
+		{
+			if (tx!=null) 
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally 
+		{
+			session.close();
+		}
+	}
 	
 	public static void adaugare(Angajat angajat)
 	{
@@ -268,25 +306,199 @@ public class Clasa_exemplu
 	{
 		Session session = factory.openSession();
 		Transaction tx = null;
-		try{
-		tx = session.beginTransaction();
-		List<Angajat> angajati = session.createQuery("FROM Angajat").list();
-		for (Angajat angajat:angajati){
-		System.out.println( angajat );
-		Set<Curs> cursuri = angajat.getCursuri();
-		for (Curs curs:cursuri){
-		System.out.println("-"+curs);
+		try
+		{
+			tx = session.beginTransaction();
+			List<Angajat> angajati = session.createQuery("FROM Angajat").list();
+			for (Angajat angajat:angajati)
+			{
+				System.out.println( angajat );
+//				Set<Curs> cursuri = angajat.getCursuri();
+//				for (Curs curs:cursuri)
+//				{
+//					System.out.println("-"+curs);
+//				}
+			}
+			tx.commit();
 		}
+		catch (HibernateException e) 
+		{
+			if (tx!=null) 
+				tx.rollback();
+			e.printStackTrace();
 		}
-		tx.commit();
-		}
-		catch (HibernateException e) {
-		if (tx!=null) tx.rollback();
-		e.printStackTrace();
-		}
-		finally {
-		session.close();
+		finally 
+		{
+			session.close();
 		}
 	}
 	
+	public static void afisare_dupa_firma( String firma )
+	{
+		Session session = factory.openSession();
+		Transaction tx = null;
+		try
+		{
+			tx = session.beginTransaction();
+			Query q = session.createQuery("FROM Angajat where firma= :f");
+			q.setParameter("f",firma);
+			List<Angajat> angajati = q.list();
+			for (Angajat angajat:angajati)
+			{
+				System.out.println( angajat );
+				Set<Curs> cursuri = angajat.getCursuri();
+				for (Curs curs:cursuri)
+				{
+					System.out.println("-"+curs);
+				}
+			}
+			tx.commit();
+		}
+		catch (HibernateException e) 
+		{
+			if (tx!=null) 
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally 
+		{
+			session.close();
+		}
+	}
+	public static void cautare_angajat_dupa_nume( String nume )
+	{
+		Session session = factory.openSession();
+		Transaction tx = null;
+		try
+		{
+			tx = session.beginTransaction();
+			Query q = session.createQuery("FROM Angajat where nume= :n");
+			q.setParameter("n",nume);
+			List<Angajat> angajati = q.list();
+			for (Angajat angajat:angajati)
+			{
+				System.out.println( angajat );
+//				Set<Curs> cursuri = angajat.getCursuri();
+//				for (Curs curs:cursuri)
+//				{
+//					System.out.println("-"+curs);
+//				}
+			}
+			tx.commit();
+		}
+		catch (HibernateException e) 
+		{
+			if (tx!=null) 
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally 
+		{
+			session.close();
+		}
+	}
+	public static void cautare_curs_dupa_denumire( String denumire )
+	{
+		Session session = factory.openSession();
+		Transaction tx = null;
+		try
+		{
+			tx = session.beginTransaction();
+			Query q = session.createQuery("FROM Curs where denumire= :n");
+			q.setParameter("n",denumire);
+			List<Curs> cursuri = q.list();
+			for (Curs curs:cursuri)
+			{
+				System.out.println( curs );
+			}
+			tx.commit();
+		}
+		catch (HibernateException e) 
+		{
+			if (tx!=null) 
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally 
+		{
+			session.close();
+		}
+	}
+	public static void afisare_vechime( int vechime )
+	{
+		Session session = factory.openSession();
+		Transaction tx = null;
+		try
+		{
+			tx = session.beginTransaction();
+			List<Angajat> angajati = session.createQuery("FROM Angajat").list();
+			for (Angajat angajat:angajati)
+			{
+				Calendar calendar= Calendar.getInstance();
+				Date acum =calendar.getTime();
+				Date data_angajarii = angajat.getdata_angajarii();
+				
+				long diferenta = acum.getTime() - data_angajarii.getTime();
+
+				long zile = diferenta / (24 * 60 * 60 * 1000);
+				if (zile > vechime )
+				{
+					System.out.println( angajat );
+					Set<Curs> cursuri = angajat.getCursuri();
+					for (Curs curs:cursuri)
+					{
+						System.out.println("-"+curs);
+					}
+				}
+			}
+			tx.commit();
+		}
+		catch (HibernateException e) 
+		{
+			if (tx!=null)
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally 
+		{
+			session.close();
+		}
+	}
+	public static void afisare_dupa_curs( String nume_curs )
+	{
+		Session session = factory.openSession();
+		Transaction tx = null;
+		try
+		{
+			tx = session.beginTransaction();
+			Query q = session.createQuery("FROM Angajat");
+			List<Angajat> angajati = q.list();
+			for (Angajat angajat:angajati)
+			{
+				Set<Curs> cursuri = angajat.getCursuri();
+				for (Curs curs:cursuri)
+				{
+					if( curs.getDenumire().equals(nume_curs) )
+					{
+						System.out.println( angajat );
+					}
+				}
+
+			}
+			tx.commit();
+		}
+		catch (HibernateException e)
+		{
+			if (tx!=null) 
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally 
+		{
+			session.close();
+		}
+	}
 }
+//<property name="show_sql">true</property>
+//<property name="format_sql">true</property>
+//<property name="use_sql_comments">true</property>
