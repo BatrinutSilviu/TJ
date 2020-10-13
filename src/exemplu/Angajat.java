@@ -2,15 +2,34 @@ package exemplu;
 
 
 import java.util.Date;
+
 import java.util.Set;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="angajati")
 public class Angajat {
+	@Id @GeneratedValue
+	@Column (name="id")
 	private int id;
+	
+	@Column (name="nume")
 	private String nume;
+	
+	@Column (name="firma")
 	private String firma;
+	
+	@Column (name="functia")
 	private String functia;
+	
+	@Column (name="data_angajarii")
 	private Date data_angajarii;
-	private Set cursuri;
+	
+	@OneToMany(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "id_angajat", referencedColumnName = "id")
+	private Set<Curs> cursuri;
+	
 	public Angajat(){}
 	public Angajat(int id,String nume,String firma, String functia, Date data_angajarii, Set cursuri)
 	{

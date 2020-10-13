@@ -1,12 +1,27 @@
 package exemplu;
 
+import javax.persistence.*;
 
+@Entity
+@Table(name="cursuri")
 public class Curs {
+	@Id @GeneratedValue
+	@Column (name="id")
 	private int id;
+	
+	@Column (name="denumire")
 	private String denumire;
+	
+	@Column (name="numar_ore")
 	private int numar_ore;
+	
+	@Column (name="valoare")
 	private String valoare;
+	
+	@Column (name="diploma")
 	private boolean diploma;
+	
+	@Column (name="anul")
 	private int anul;
 	public Curs(){}
 	public Curs(int id, String denumire, int numar_ore, String valoare, boolean diploma,

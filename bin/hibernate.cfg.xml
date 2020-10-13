@@ -8,6 +8,5 @@
 		<property name="hibernate.connection.url">jdbc:mysql://localhost/sys</property>
 		<property name="hibernate.connection.username">root</property>
 		<property name="hibernate.connection.password">root</property>
-		<mapping class="exemplu.Angajat" resource="Angajat.hbm.xml"/>
 	</session-factory>
 </hibernate-configuration>

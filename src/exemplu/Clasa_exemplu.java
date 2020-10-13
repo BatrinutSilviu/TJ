@@ -1,6 +1,7 @@
 package exemplu;
 
 import java.io.BufferedReader;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
+import org.hibernate.cfg.AnnotationConfiguration;
 
 public class Clasa_exemplu 
 {
@@ -30,6 +32,8 @@ public class Clasa_exemplu
 		{
 			Configuration configuration = new Configuration();
 			configuration.configure();
+			configuration.addAnnotatedClass(Angajat.class);
+			configuration.addAnnotatedClass(Curs.class);
 			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(
 			configuration.getProperties()).buildServiceRegistry();
 			factory = configuration.buildSessionFactory(serviceRegistry);
@@ -118,6 +122,11 @@ public class Clasa_exemplu
 				{
 					System.out.println("Dati id-ul angajatului");
 					String id = br.readLine();
+					if( !exista_id(Integer.parseInt(id),"Angajat") )
+					{
+						System.out.println("Nu exista id");
+						break;
+					}
 					stergere_angajat(Integer.parseInt(id));
 					break;
 				}
@@ -125,6 +134,11 @@ public class Clasa_exemplu
 				{
 					System.out.println("Dati id-ul angajatului");
 					String id = br.readLine();
+					if( !exista_id(Integer.parseInt(id),"Angajat") )
+					{
+						System.out.println("Nu exista id");
+						break;
+					}
 					System.out.println("Dati functia");
 					String functie = br.readLine();
 					actualizare_angajat(Integer.parseInt(id),functie);
@@ -141,6 +155,11 @@ public class Clasa_exemplu
 				{
 					System.out.println("Dati id-ul cursului");
 					String id = br.readLine();
+					if( !exista_id(Integer.parseInt(id),"Curs") )
+					{
+						System.out.println("Nu exista id");
+						break;
+					}
 					stergere_curs(Integer.parseInt(id));
 					break;
 				}
@@ -148,6 +167,11 @@ public class Clasa_exemplu
 				{
 					System.out.println("Dati id-ul cursului");
 					String id = br.readLine();
+					if( !exista_id(Integer.parseInt(id),"Curs") )
+					{
+						System.out.println("Nu exista id");
+						break;
+					}
 					System.out.println("Dati numarul nou de ore");
 					String ore = br.readLine();
 					actualizare_curs(Integer.parseInt(id),Integer.parseInt(ore));
@@ -288,17 +312,21 @@ public class Clasa_exemplu
 	{
 		Session session = factory.openSession();
 		Transaction tx = null;
-		try{
-		tx = session.beginTransaction();
-		session.save(angajat);
-		tx.commit();
+		try
+		{
+			tx = session.beginTransaction();
+			session.save(angajat);
+			tx.commit();
 		}
-		catch (HibernateException e) {
-		if (tx!=null) tx.rollback();
-		e.printStackTrace();
+		catch (HibernateException e) 
+		{
+			if (tx!=null) 
+				tx.rollback();
+			e.printStackTrace();
 		}
-		finally {
-		session.close();
+		finally 
+		{
+			session.close();
 		}
 	}
 	
@@ -313,11 +341,6 @@ public class Clasa_exemplu
 			for (Angajat angajat:angajati)
 			{
 				System.out.println( angajat );
-//				Set<Curs> cursuri = angajat.getCursuri();
-//				for (Curs curs:cursuri)
-//				{
-//					System.out.println("-"+curs);
-//				}
 			}
 			tx.commit();
 		}
@@ -346,11 +369,6 @@ public class Clasa_exemplu
 			for (Angajat angajat:angajati)
 			{
 				System.out.println( angajat );
-				Set<Curs> cursuri = angajat.getCursuri();
-				for (Curs curs:cursuri)
-				{
-					System.out.println("-"+curs);
-				}
 			}
 			tx.commit();
 		}
@@ -378,11 +396,6 @@ public class Clasa_exemplu
 			for (Angajat angajat:angajati)
 			{
 				System.out.println( angajat );
-//				Set<Curs> cursuri = angajat.getCursuri();
-//				for (Curs curs:cursuri)
-//				{
-//					System.out.println("-"+curs);
-//				}
 			}
 			tx.commit();
 		}
@@ -444,11 +457,6 @@ public class Clasa_exemplu
 				if (zile > vechime )
 				{
 					System.out.println( angajat );
-					Set<Curs> cursuri = angajat.getCursuri();
-					for (Curs curs:cursuri)
-					{
-						System.out.println("-"+curs);
-					}
 				}
 			}
 			tx.commit();
@@ -498,7 +506,51 @@ public class Clasa_exemplu
 			session.close();
 		}
 	}
+	public static boolean exista_id( Integer id, String tabel )
+	{
+		boolean ok=false;
+		Session session = factory.openSession();
+		Transaction tx = null;
+		try
+		{
+			tx = session.beginTransaction();
+			Query q = session.createQuery("FROM " +tabel);
+			if(tabel.equals("Angajat"))
+			{
+				List<Angajat> angajati = q.list();
+				for (Angajat angajat:angajati)
+				{
+					if(angajat.getId() == id)
+					{
+						ok = true;
+						break;
+					}
+				}
+			}
+			else if(tabel.equals("Curs"))
+			{
+				List<Curs> cursuri = q.list();
+				for (Curs curs:cursuri)
+				{
+					if(curs.getId() == id)
+					{
+						ok = true;
+						break;
+					}
+				}
+			}		
+			tx.commit();
+		}
+		catch (HibernateException e)
+		{
+			if (tx!=null) 
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally 
+		{
+			session.close();				
+			return ok;
+		}
+	}
 }
-//<property name="show_sql">true</property>
-//<property name="format_sql">true</property>
-//<property name="use_sql_comments">true</property>
